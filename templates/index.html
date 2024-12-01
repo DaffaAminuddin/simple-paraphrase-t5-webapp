@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paraphrase App</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="static/Images/image.png" alt="Banner" class="banner">
+            <h1>Paraphrase App</h1>
+        </header>
+        <main>
+            <div class="input-area">
+                <textarea id="input-text" placeholder="Enter your text here..."></textarea>
+                <button id="paraphrase-button">Paraphrase</button>
+            </div>
+            <div class="output-area">
+                <h2>Paraphrased Text</h2>
+                <div id="output-text"></div>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 DfnParaphrase</p>
+        </footer>
+    </div>
+    <script>
+        document.getElementById("paraphrase-button").addEventListener("click", async () => {
+            const inputText = document.getElementById("input-text").value;
+
+            if (!inputText.trim()) {
+                alert("Please enter some text to paraphrase.");
+                return;
+            }
+
+            const response = await fetch("/paraphrase", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text: inputText })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("output-text").innerText = data.paraphrased_text;
+            } else {
+                alert("Error processing your request. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>
